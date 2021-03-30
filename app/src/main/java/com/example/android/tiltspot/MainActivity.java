@@ -31,6 +31,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -67,10 +68,15 @@ public class MainActivity extends AppCompatActivity
 
     private float x = (float) screenWidth/2;
     private float y = (float) screenHeight/2;
+    private float x_o = x;
+    private float y_o = y;
     private float xVelocity = 0;
     private float yVelocity = 0;
     private float xAcceleration = 0;
     private float yAcceleration = 0;
+    private float loc_x = screenWidth/2;
+    private float loc_y = screenHeight/2;
+    private int action = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,14 +207,26 @@ public class MainActivity extends AppCompatActivity
         }
 
         //Update velocities and positions
-        xAcceleration = roll * screenWidth/200;
-        xVelocity = xVelocity + xAcceleration;
-
-        yAcceleration = -pitch * screenHeight/200;
-        yVelocity = yVelocity + yAcceleration;
-
-        x += xVelocity;
-        y += yVelocity;
+        x_o = x;
+        y_o = y;
+        if((action == MotionEvent.ACTION_DOWN) || (action == MotionEvent.ACTION_MOVE)) {
+            x = loc_x;
+            xVelocity = x - x_o;
+        }
+        else {
+            x += xVelocity;
+            xAcceleration = roll * screenWidth/500;
+            xVelocity = xVelocity + xAcceleration;
+        }
+        if((action == MotionEvent.ACTION_DOWN) || (action == MotionEvent.ACTION_MOVE)) {
+            y = loc_y;
+            yVelocity = y - y_o;
+        }
+        else {
+            y += yVelocity;
+            yAcceleration = -pitch * screenHeight / 500;
+            yVelocity = yVelocity + yAcceleration;
+        }
 
         //Rebound velocity
         if ((x > screenWidth) || (x < 0)) {
@@ -250,5 +268,28 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_MOVE:
+                this.loc_x = event.getX();
+                this.loc_y = event.getY();
+                this.action = MotionEvent.ACTION_MOVE;
+                break;
+            case MotionEvent.ACTION_DOWN:
+                this.loc_x = event.getX();
+                this.loc_y = event.getY();
+                this.action = MotionEvent.ACTION_DOWN;
+                break;
+            case MotionEvent.ACTION_UP:
+                this.action = MotionEvent.ACTION_UP;
+                break;
+        }
+
+        return true;
+
     }
 }
