@@ -209,23 +209,25 @@ public class MainActivity extends AppCompatActivity
         //Update velocities and positions
         x_o = x;
         y_o = y;
+
         if((action == MotionEvent.ACTION_DOWN) || (action == MotionEvent.ACTION_MOVE)) {
             x = loc_x;
             xVelocity = x - x_o;
         }
         else {
-            x += xVelocity;
             xAcceleration = roll * screenWidth/500;
             xVelocity = xVelocity + xAcceleration;
+            x += xVelocity;
         }
+
         if((action == MotionEvent.ACTION_DOWN) || (action == MotionEvent.ACTION_MOVE)) {
             y = loc_y;
             yVelocity = y - y_o;
         }
         else {
-            y += yVelocity;
             yAcceleration = -pitch * screenHeight / 500;
             yVelocity = yVelocity + yAcceleration;
+            y += yVelocity;
         }
 
         //Rebound velocity
