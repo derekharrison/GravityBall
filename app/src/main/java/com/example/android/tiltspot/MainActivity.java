@@ -113,14 +113,14 @@ public class MainActivity extends AppCompatActivity
         //
         // Check to ensure sensors are available before registering listeners.
         // Both listeners are registered with a "normal" amount of delay
-        // (SENSOR_DELAY_NORMAL).
+        // (SENSOR_DELAY_GAME).
         if (mSensorAccelerometer != null) {
             mSensorManager.registerListener(this, mSensorAccelerometer,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    SensorManager.SENSOR_DELAY_GAME);
         }
         if (mSensorMagnetometer != null) {
             mSensorManager.registerListener(this, mSensorMagnetometer,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    SensorManager.SENSOR_DELAY_GAME);
         }
     }
 
