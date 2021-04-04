@@ -22,7 +22,6 @@
 package com.example.android.tiltspot;
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
